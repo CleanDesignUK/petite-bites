@@ -768,7 +768,7 @@
 
     <!-- Order Form -->
     <section class="order-form" id="order-now">
-      <h2>Get in Touch / Order Inquiries</h2>
+      <h2 >Get in Touch / Order Inquiries</h2>
       <p>
         Petite Bites is a homemade business in Jakarta offering luxury desserts
         crafted with care and passion. Indulge in treats that are truly
@@ -776,14 +776,9 @@
       </p>
       <form id="order-form">
         <!-- Replace with your actual Web3Forms access_key -->
-        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+        <input type="hidden" name="access_key" value="536f9e97-50da-48ce-9ffb-ed99a8c276ee" />
 
-        <!-- Set a redirect page if you wish -->
-        <input
-          type="hidden"
-          name="redirect"
-          value="https://yourwebsite.com/thankyou.html"
-        />
+      
 
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required />
@@ -875,113 +870,215 @@
 
   <!-- SweetAlert2 and AJAX for Form Submissions -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Function to handle form submissions
-      function handleFormSubmit(formId, successMessage, errorMessage) {
-        const form = document.getElementById(formId);
-        form.addEventListener('submit', function(e) {
-          e.preventDefault(); // Prevent default form submission
+// JavaScript for Floating Notifications and Inquiries
+document.addEventListener('DOMContentLoaded', function() {
+  // Function to handle form submissions
+  function handleFormSubmit(formId, successMessage, errorMessage) {
+    const form = document.getElementById(formId);
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); // Prevent default form submission
 
-          const formData = new FormData(form);
-          const data = Object.fromEntries(formData.entries());
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-          fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-          })
-          .then(async response => {
-            if (response.ok) {
-              // Using SweetAlert for form submissions
-              Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: successMessage,
-                confirmButtonColor: '#EF4135'
-              });
-              form.reset();
-            } else {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || errorMessage);
-            }
-          })
-          .catch(error => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: errorMessage,
-              footer: error.toString(),
-              confirmButtonColor: '#EF4135'
-            });
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(async response => {
+        if (response.ok) {
+          // Using SweetAlert for form submissions
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: successMessage,
+            confirmButtonColor: '#EF4135'
           });
+          form.reset();
+        } else {
+          const errorResponse = await response.json();
+          throw new Error(errorResponse.message || errorMessage);
+        }
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: errorMessage,
+          footer: error.toString(),
+          confirmButtonColor: '#EF4135'
         });
-      }
-
-      // Handle Order Form Submission
-      handleFormSubmit(
-        'order-form',
-        'Your order has been received! We will contact you shortly.',
-        'There was an error submitting your order. Please try again later.'
-      );
-
-      // Handle Contact Form Submission
-      handleFormSubmit(
-        'contact-form',
-        'Your message has been sent! We will get back to you soon.',
-        'There was an error sending your message. Please try again later.'
-      );
-
-      // Function to display notifications
-      function showNotification(message, type = 'inquiry', duration = 5000) {
-        const container = document.getElementById('notification-container');
-
-        const notification = document.createElement('div');
-        notification.classList.add('notification', type);
-        notification.textContent = message;
-
-        container.appendChild(notification);
-
-        // Trigger the show animation
-        setTimeout(() => {
-          notification.classList.add('show');
-        }, 100); // Slight delay to allow for CSS transition
-
-        // Remove the notification after the specified duration
-        setTimeout(() => {
-          notification.classList.remove('show');
-          // Remove the element from the DOM after the transition
-          notification.addEventListener('transitionend', () => {
-            notification.remove();
-          });
-        }, duration);
-      }
-
-      // Function to simulate an inquiry
-      function simulateInquiry() {
-        const inquiries = [
-          'John Doe is interested in Luxury Brownies.',
-          'Jane Smith wants to order Cheesecake.',
-          'Mike Johnson is asking about Rumballs.',
-          'Emily Davis would like to place an order for American Cookies.',
-          'Sophia Wilson has a question about custom orders.'
-        ];
-
-        // Select a random inquiry from the list
-        const randomInquiry = inquiries[Math.floor(Math.random() * inquiries.length)];
-
-        // Display the inquiry as a floating notification
-        showNotification(randomInquiry, 'inquiry', 7000);
-      }
-
-      // Initial inquiry simulation after 7 seconds
-      setTimeout(simulateInquiry, 7000);
-
-      // Repeat inquiry simulation every 7 seconds
-      setInterval(simulateInquiry, 14000);
+      });
     });
+  }
+
+  // Handle Order Form Submission
+  handleFormSubmit(
+    'order-form',
+    'Your order has been received! We will contact you shortly.',
+    'There was an error submitting your order. Please try again later.'
+  );
+
+  // Handle Contact Form Submission
+  handleFormSubmit(
+    'contact-form',
+    'Your message has been sent! We will get back to you soon.',
+    'There was an error sending your message. Please try again later.'
+  );
+
+  // Function to display notifications
+  function showNotification(message, type = 'inquiry', duration = 2500) { // duration set to 2.5 seconds
+    const container = document.getElementById('notification-container');
+
+    const notification = document.createElement('div');
+    notification.classList.add('notification', type);
+    notification.textContent = message;
+
+    container.appendChild(notification);
+
+    // Trigger the show animation
+    setTimeout(() => {
+      notification.classList.add('show');
+    }, 100); // Slight delay to allow for CSS transition
+
+    // Remove the notification after the specified duration
+    setTimeout(() => {
+      notification.classList.remove('show');
+      // Remove the element from the DOM after the transition
+      notification.addEventListener('transitionend', () => {
+        notification.remove();
+      });
+    }, duration);
+  }
+
+  // List of 100 realistic inquiries with Indonesian names
+  const inquiries = [
+    'Agus Prabowo is interested in Luxury Brownies.',
+    'Budi Santoso wants to order Cheesecake.',
+    'Citra Dewi is asking about Rumballs.',
+    'Dedi Haryanto would like to place an order for American Cookies.',
+    'Eka Lestari has a question about custom orders.',
+    'Fajar Wijaya is looking to buy Luxury Brownies.',
+    'Gita Kartika wants to purchase Cheesecake.',
+    'Hadi Suryanto is interested in Rumballs.',
+    'Indah Ratna would like to place an order for American Cookies.',
+    'Joko Nugroho has a question about custom orders.',
+    'Kurniawan Yudha is interested in Luxury Brownies.',
+    'Lestari Wulandari wants to order Cheesecake.',
+    'Made Adi is asking about Rumballs.',
+    'Niko Prasetyo would like to place an order for American Cookies.',
+    'Oka Putra has a question about custom orders.',
+    'Putri Maharani is interested in Luxury Brownies.',
+    'Rafi Setiawan wants to purchase Cheesecake.',
+    'Sigit Purnomo is asking about Rumballs.',
+    'Taufik Rahman would like to place an order for American Cookies.',
+    'Udin Kurnia has a question about custom orders.',
+    'Ani Larasati is interested in Luxury Brownies.',
+    'Bella Sari wants to order Cheesecake.',
+    'Candra Kurnia is asking about Rumballs.',
+    'Dewi Ayu would like to place an order for American Cookies.',
+    'Eka Saraswati has a question about custom orders.',
+    'Fitri Amelia is interested in Luxury Brownies.',
+    'Guntur Pratama wants to purchase Cheesecake.',
+    'Hani Suci is asking about Rumballs.',
+    'Indriani Putri would like to place an order for American Cookies.',
+    'Jamilah Noor has a question about custom orders.',
+    'Kartika Dewi is interested in Luxury Brownies.',
+    'Lestari Kartika wants to order Cheesecake.',
+    'Maya Rahayu is asking about Rumballs.',
+    'Nita Paramita would like to place an order for American Cookies.',
+    'Putri Wulandari has a question about custom orders.',
+    'Ratna Sari is interested in Luxury Brownies.',
+    'Sari Lestari wants to purchase Cheesecake.',
+    'Tika Sari is asking about Rumballs.',
+    'Vina Anggraeni would like to place an order for American Cookies.',
+    'Wulan Sari has a question about custom orders.',
+    'Yani Pratiwi is interested in Luxury Brownies.',
+    'Arief Nugroho wants to order Cheesecake.',
+    'Bunga Sari is asking about Rumballs.',
+    'Citra Ayu would like to place an order for American Cookies.',
+    'Dwi Indah has a question about custom orders.',
+    'Eko Budi is interested in Luxury Brownies.',
+    'Fitria Dewi wants to purchase Cheesecake.',
+    'Gisela Maharani is asking about Rumballs.',
+    'Hendra Suryanto would like to place an order for American Cookies.',
+    'Intan Permatasari has a question about custom orders.',
+    'Joko Purnomo is interested in Luxury Brownies.',
+    'Kiki Wulandari wants to order Cheesecake.',
+    'Lala Saraswati is asking about Rumballs.',
+    'Maya Amelia would like to place an order for American Cookies.',
+    'Nia Lestari has a question about custom orders.',
+    'Oka Putri is interested in Luxury Brownies.',
+    'Putri Ratna wants to purchase Cheesecake.',
+    'Rani Kartika is asking about Rumballs.',
+    'Santi Maharani would like to place an order for American Cookies.',
+    'Tania Ayu has a question about custom orders.',
+    'Uli Kurnia is interested in Luxury Brownies.',
+    'Vivi Sari wants to order Cheesecake.',
+    'Wati Indah is asking about Rumballs.',
+    'Yulia Pratama would like to place an order for American Cookies.',
+    'Zara Sari has a question about custom orders.',
+    'Aulia Rahayu is interested in Luxury Brownies.',
+    'Bagus Prabowo wants to purchase Cheesecake.',
+    'Citra Dewi is asking about Rumballs.',
+    'Dimas Nugroho would like to place an order for American Cookies.',
+    'Endang Ayu has a question about custom orders.',
+    'Fitri Lestari is interested in Luxury Brownies.',
+    'Galih Santoso wants to order Cheesecake.',
+    'Hana Sari is asking about Rumballs.',
+    'Ika Permatasari would like to place an order for American Cookies.',
+    'Joko Indra has a question about custom orders.',
+    'Kiki Putri is interested in Luxury Brownies.',
+    'Lia Wulandari wants to purchase Cheesecake.',
+    'Mita Saraswati is asking about Rumballs.',
+    'Nita Dewi would like to place an order for American Cookies.',
+    'Oka Ratna has a question about custom orders.',
+    'Putri Kartika is interested in Luxury Brownies.',
+    'Rina Maharani wants to order Cheesecake.',
+    'Santi Indah is asking about Rumballs.',
+    'Tika Dewi would like to place an order for American Cookies.',
+    'Vina Permatasari has a question about custom orders.',
+    'Wulan Pratiwi is interested in Luxury Brownies.',
+    'Yanti Santoso wants to purchase Cheesecake.',
+    'Zainul Hadi is asking about Rumballs.',
+    'Anisa Putri would like to place an order for American Cookies.',
+    'Bagus Indra has a question about custom orders.',
+    'Candra Ayu is interested in Luxury Brownies.',
+    'Dewi Lestari wants to order Cheesecake.',
+    'Eko Permatasari is asking about Rumballs.',
+    'Fitri Maharani would like to place an order for American Cookies.',
+    'Gita Ratna has a question about custom orders.',
+    'Hendra Kartika is interested in Luxury Brownies.',
+    'Intan Wulandari wants to purchase Cheesecake.',
+    'Jamilah Dewi is asking about Rumballs.',
+    'Kiki Permatasari would like to place an order for American Cookies.',
+    'Lala Indah has a question about custom orders.'
+  ];
+
+  let currentInquiryIndex = 0;
+
+  // Function to simulate an inquiry
+  function simulateInquiry() {
+    if (currentInquiryIndex >= inquiries.length) {
+      currentInquiryIndex = 0; // Restart from beginning if desired
+    }
+
+    const inquiry = inquiries[currentInquiryIndex];
+    showNotification(inquiry, 'inquiry', 2500); // 2.5 seconds duration
+
+    currentInquiryIndex++;
+  }
+
+  // Initial inquiry simulation after 3 seconds
+  setTimeout(simulateInquiry, 3000);
+
+  // Repeat inquiry simulation every 3 seconds
+  setInterval(simulateInquiry, 8000);
+});
   </script>
 </body>
 </html>
