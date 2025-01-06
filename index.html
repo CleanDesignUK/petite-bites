@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Petite Bites by Nova Isna - Luxury homemade brownies, cheesecakes, rumballs, and American-style cookies. Perfect for dessert lovers in Jakarta and across Indonesia who crave indulgent, locally crafted treats."/>
+  <meta name="keywords" content="Luxury Homemade Desserts Jakarta, Brownies Jakarta, Cheesecakes Indonesia, Rumballs Jakarta, Cookies Indonesia, Petite Bites, Nova Isna, Homemade Bakery Jakarta, Premium Ingredients Jakarta"/>
+  <meta name="author" content="Nova Isna"/>
+
+  <title>Petite Bites by Nova Isna - Luxury Homemade Desserts</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Montserrat:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- SweetAlert2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* French Flag Colors */
+    :root {
+      --blue-flag: #0781f3;   /* Primary Blue */
+      --white-flag: #FFFFFF;  /* White */
+      --red-flag: #EF4135;    /* Red */
+      --gold-accent: #FFD700; /* Gold */
+      --dark-text: #333333;   /* For general text */
+      --light-gray: #f9f9f9;  /* Light gray for subtle backgrounds */
+      --border-gray: #e0e0e0; /* Border gray for elements */
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--white-flag);
+      color: var(--dark-text);
+      line-height: 1.6;
+      overflow-x: hidden; /* Prevent horizontal scroll */
+    }
+
+    /* Notification Container */
+    #notification-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 300px;
+      z-index: 2000; /* Ensure it's above other elements */
+    }
+
+    /* Individual Notification */
+    .notification {
+      background-color: rgba(7, 129, 243, 0.9); /* Blue background with some transparency */
+      color: white;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    /* Show Notification */
+    .notification.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Success Notification */
+    .notification.success {
+      background-color: #28a745; /* Green */
+    }
+
+    /* Error Notification */
+    .notification.error {
+      background-color: #dc3545; /* Red */
+    }
+
+    /* Inquiry Notification */
+    .notification.inquiry {
+      background-color: #17a2b8; /* Teal */
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(90deg, var(--blue-flag) 33%, var(--white-flag) 33%, var(--white-flag) 66%, var(--red-flag) 66%);
+      color: black;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header .logo {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      color: white;
+    }
+    /* Desktop Navbar */
+    header nav.desktop-nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+    header nav.desktop-nav ul li {
+      position: relative;
+    }
+    header nav.desktop-nav ul li a {
+      color: black;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      border-radius: 5px;
+    }
+    header nav.desktop-nav ul li a:hover {
+      color: var(--blue-flag);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile Navbar */
+    header nav.mobile-nav {
+      display: none;
+      width: 100%;
+      background-color: var(--white-flag);
+      position: absolute;
+      top: 60px; /* Adjust based on header height */
+      left: 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-bottom: 1px solid var(--border-gray);
+      z-index: 999;
+      transition: max-height 0.3s ease-in-out;
+      max-height: 0;
+      overflow: hidden;
+    }
+    header nav.mobile-nav.active {
+      display: block;
+      max-height: 500px; /* Enough to show all menu items */
+    }
+    header nav.mobile-nav ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem 2rem;
+    }
+    header nav.mobile-nav ul li a {
+      color: #000; /* Black text for mobile */
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem;
+      transition: color 0.3s ease, background-color 0.3s ease;
+      border-radius: 5px;
+    }
+    header nav.mobile-nav ul li a:hover {
+      color: var(--red-flag);
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Hamburger Menu Icon */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: #000;
+      transition: all 0.3s ease;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height:100vh;
+      padding: 4rem 1rem;
+      background: linear-gradient(
+        rgba(0,0,0,0.4),
+        rgba(0,0,0,0.4)
+      ), url('assets/images/petite-bites-hero.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: var(--white-flag);
+    }
+    .hero h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .hero p {
+      max-width: 700px;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    .hero a {
+      background-color: var(--red-flag);
+      color: var(--white-flag);
+      padding: 0.75rem 2rem;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 50px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    .hero a:hover {
+      background-color: var(--blue-flag);
+      transform: translateY(-2px);
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 1rem;
+    }
+
+    /* Product Display */
+    .product-display h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--blue-flag);
+      position: relative;
+    }
+    .product-display h2::after {
+      content: '';
+      width: 100px;
+      height: 3px;
+      background-color: var(--red-flag);
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      justify-items: center; /* Center products on small screens */
+    }
+    .product-card {
+      background-color: var(--white-flag);
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+      max-width: 300px; /* Prevent overflow on small screens */
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+    .product-info {
+      padding: 1.5rem;
+    }
+    .product-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--blue-flag);
+    }
+    .product-info p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    /* Gallery */
+   
+
+    /* Order Form (Web3Forms) */
+    .order-form {
+      margin-top: 4rem;
+      background-color: var(--light-gray);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .order-form h2 {
+      font-family: 'Dancing Script', cursive;
+      color: var(--blue-flag);
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .order-form h2::after {
+      content: '';
+      width: 80px;
+      height: 3px;
+      background-color: var(--red-flag);
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .order-form p {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+    .order-form form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .order-form label {
+      font-weight: bold;
+      color: var(--dark-text);
+    }
+    .order-form input[type="text"],
+    .order-form input[type="email"],
+    .order-form textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-gray);
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .order-form button {
+      background-color: var(--red-flag);
+      color: var(--white-flag);
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      align-self: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    .order-form button:hover {
+      background-color: #c8322b;
+      transform: translateY(-2px);
+    }
+    .disclaimer {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+    }
+
+    /* About & Reviews */
+    .about,
+    .reviews {
+      margin-top: 4rem;
+      text-align: center;
+    }
+    .about h2,
+    .reviews h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      color: var(--blue-flag);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .about h2::after,
+    .reviews h2::after {
+      content: '';
+      width: 80px;
+      height: 3px;
+      background-color: var(--red-flag);
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .about p,
+    .reviews p {
+      max-width: 800px;
+      margin: 0.5rem auto 2rem auto;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .reviews ul {
+      list-style: none;
+      max-width: 800px;
+      margin: 1rem auto;
+      padding: 0;
+    }
+    .reviews li {
+      background-color: var(--white-flag);
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid var(--red-flag);
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-style: italic;
+      color: #333;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      margin-top: 4rem;
+      background-color: var(--light-gray);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .contact-section h2 {
+      font-family: 'Dancing Script', cursive;
+      color: var(--blue-flag);
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .contact-section h2::after {
+      content: '';
+      width: 80px;
+      height: 3px;
+      background-color: var(--red-flag);
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .contact-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact-section label {
+      font-weight: bold;
+      color: var(--dark-text);
+    }
+    .contact-section input[type="text"],
+    .contact-section input[type="email"],
+    .contact-section textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-gray);
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .contact-section button {
+      background-color: var(--red-flag);
+      color: var(--white-flag);
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      align-self: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
+    .contact-section button:hover {
+      background-color: #c8322b;
+      transform: translateY(-2px);
+    }
+    .contact-section p {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .contact-section a {
+      color: var(--blue-flag);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
+    .contact-section a:hover {
+      color: var(--red-flag);
+      text-decoration: underline;
+    }
+
+    /* Social */
+    .social {
+      margin-top: 4rem;
+      text-align: center;
+    }
+    .social h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      color: var(--blue-flag);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    .social h2::after {
+      content: '';
+      width: 80px;
+      height: 3px;
+      background-color: var(--red-flag);
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .social a {
+      color: var(--blue-flag);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin: 0 0.5rem;
+      transition: color 0.3s ease, text-decoration 0.3s ease;
+    }
+    .social a:hover {
+      color: var(--red-flag);
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--blue-flag);
+      color: var(--white-flag);
+      text-align: center;
+      padding: 1.5rem 2rem;
+      margin-top: 4rem;
+      position: relative;
+    }
+    footer::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: var(--red-flag);
+      border-radius: 2px;
+    }
+    footer p {
+      font-size: 0.9rem;
+    }
+
+    /* Profile Image */
+    .nova-profile {
+      width: 100%;
+      max-width: 200px; /* Adjust the max-width as needed */
+      height: auto;
+      border-radius: 50%; /* Makes the image circular */
+      margin: 1rem auto; /* Centers the image with margin */
+      display: block;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      /* Hide desktop navbar and show hamburger */
+      header nav.desktop-nav {
+        display: none;
+      }
+
+      header .logo {color:black;}
+      header nav.mobile-nav {
+        display: block;
+      }
+      .hamburger {
+        display: flex;
+      }
+
+      /* Center products on small screens */
+      .products-grid {
+        justify-items: center;
+      }
+
+      /* Adjust hero section */
+      .hero h2 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .product-display h2,
+      .gallery h2,
+      .order-form h2,
+      .about h2,
+      .reviews h2,
+      .contact-section h2,
+      .social h2 {
+        font-size: 2rem;
+      }
+
+      /* Footer adjustments */
+      footer::before {
+        display: none;
+      }
+
+      /* Adjust mobile navbar position */
+      header nav.mobile-nav {
+        top: 60px; /* Adjust based on header height */
+      }
+
+      /* Ensure mobile navbar doesn't push content */
+      .mobile-nav.active {
+        position: absolute;
+      }
+
+      .products-grid {
+      display: grid;
+      grid-template-columns: none;
+      gap: 2rem;
+      justify-items: center; /* Center products on small screens */
+    }
+    }
+  </style>
+
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- JavaScript for Mobile Navbar Toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const mobileNav = document.querySelector('.mobile-nav');
+
+      hamburger.addEventListener('click', () => {
+        mobileNav.classList.toggle('active');
+        hamburger.classList.toggle('active');
+      });
+
+      // Close mobile nav when clicking outside
+      document.addEventListener('click', function(event) {
+        if (!mobileNav.contains(event.target) && !hamburger.contains(event.target)) {
+          mobileNav.classList.remove('active');
+          hamburger.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <!-- Notification Container -->
+  <div id="notification-container"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">Petite Bites</div>
+      <!-- Desktop Navbar -->
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#products">Products</a></li>
+          
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <!-- Hamburger Icon for Mobile -->
+      <div class="hamburger">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <!-- Mobile Navbar -->
+      <nav class="mobile-nav">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#products">Products</a></li>
+       
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <h2>Indulge in Luxury, Savor the Difference</h2>
+    <p>Experience handcrafted treats made with the finest ingredients. We bring a taste of decadence to every bite. Welcome to Petite Bites.</p>
+    <a href="#order-now">Order Now</a>
+  </section>
+
+  <div class="container">
+    <!-- Product Display -->
+    <section class="product-display" id="products">
+      <h2>Our Products</h2>
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card">
+          <img
+            src="assets/images/petite-brownie-bites.jpg"
+            alt="Luxury Brownies in Jakarta"
+          />
+          <div class="product-info">
+            <h3>Luxury Brownies</h3>
+            <p>Rp120,000 per box</p>
+          </div>
+        </div>
+        <!-- Product 2 -->
+        <div class="product-card">
+          <img
+            src="assets/images/petite-cheesecake.jpg"
+            alt="Cheesecake in Indonesia"
+          />
+          <div class="product-info">
+            <h3>Cheesecake</h3>
+            <p>Rp200,000 each</p>
+          </div>
+        </div>
+        <!-- Product 3 -->
+        <div class="product-card">
+          <img
+            src="assets/images/rumball-real.jpg"
+            alt="Rumballs in Jakarta"
+          />
+          <div class="product-info">
+            <h3>Rumballs</h3>
+            <p>Rp60,000 per dozen</p>
+          </div>
+        </div>
+        <!-- Product 4 -->
+        <div class="product-card">
+          <img
+            src="assets/images/american-cookie.jpg"
+            alt="American Style Cookies in Indonesia"
+          />
+          <div class="product-info">
+            <h3>American Cookies</h3>
+            <p>Rp120,000 per box half dozen </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+   
+
+    <!-- Order Form -->
+    <section class="order-form" id="order-now">
+      <h2>Get in Touch / Order Inquiries</h2>
+      <p>
+        Petite Bites is a homemade business in Jakarta offering luxury desserts
+        crafted with care and passion. Indulge in treats that are truly
+        to die for!
+      </p>
+      <form id="order-form">
+        <!-- Replace with your actual Web3Forms access_key -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+
+        <!-- Set a redirect page if you wish -->
+        <input
+          type="hidden"
+          name="redirect"
+          value="https://yourwebsite.com/thankyou.html"
+        />
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="message">Your Inquiry / Desired Product:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+      <p class="disclaimer">
+        All inquiries are reviewed with care. We will get back to you within
+        24 hours. All orders are made to order with love and attention to detail.
+      </p>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <h2>About Nova</h2>
+      <img src="assets/images/nova-profile.jpg" alt="Nova Isna" class="nova-profile"/>
+      <p>
+        Nova Isna is an aspiring baker based in Jakarta with a passion for
+        creating luxury treats. She uses only the finest ingredients to craft
+        her homemade brownies, cheesecakes, rumballs, and cookies. Petite Bites
+        is just the beginning of her dream to open her own bakery serving the
+        local community.
+      </p>
+    </section>
+
+    <!-- Reviews -->
+    <section class="reviews">
+      <h2>Reviews</h2>
+      <ul>
+        <li>"The brownies are absolutely divine!"</li>
+        <li>"The best cheesecake I have ever had."</li>
+        <li>"Nova's rumballs are a holiday must-have."</li>
+      </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+      <h2>Contact Us</h2>
+      <form id="contact-form">
+        <!-- Replace with your actual Web3Forms access_key -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+
+        <label for="contact-name">Name:</label>
+        <input type="text" id="contact-name" name="name" required />
+
+        <label for="contact-email">Email:</label>
+        <input type="email" id="contact-email" name="email" required />
+
+        <label for="contact-message">Message:</label>
+        <textarea id="contact-message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+
+      <!-- WhatsApp Link -->
+      <p>
+        <a href="https://wa.me/6287872055691" target="_blank">
+          WhatsApp Us
+        </a>
+      </p>
+    </section>
+
+    <!-- Social -->
+    <section class="social">
+      <h2>Connect with Us</h2>
+      <p>
+        <a href="https://www.facebook.com/petitebites.id/" target="_blank">
+          Visit our Facebook
+        </a>
+        |
+      
+      </p>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      &copy; 2025 Petite Bites by Nova Isna. Proudly serving Jakarta and Indonesia
+      with love. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- SweetAlert2 and AJAX for Form Submissions -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to handle form submissions
+      function handleFormSubmit(formId, successMessage, errorMessage) {
+        const form = document.getElementById(formId);
+        form.addEventListener('submit', function(e) {
+          e.preventDefault(); // Prevent default form submission
+
+          const formData = new FormData(form);
+          const data = Object.fromEntries(formData.entries());
+
+          fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+          .then(async response => {
+            if (response.ok) {
+              // Using SweetAlert for form submissions
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: successMessage,
+                confirmButtonColor: '#EF4135'
+              });
+              form.reset();
+            } else {
+              const errorResponse = await response.json();
+              throw new Error(errorResponse.message || errorMessage);
+            }
+          })
+          .catch(error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: errorMessage,
+              footer: error.toString(),
+              confirmButtonColor: '#EF4135'
+            });
+          });
+        });
+      }
+
+      // Handle Order Form Submission
+      handleFormSubmit(
+        'order-form',
+        'Your order has been received! We will contact you shortly.',
+        'There was an error submitting your order. Please try again later.'
+      );
+
+      // Handle Contact Form Submission
+      handleFormSubmit(
+        'contact-form',
+        'Your message has been sent! We will get back to you soon.',
+        'There was an error sending your message. Please try again later.'
+      );
+
+      // Function to display notifications
+      function showNotification(message, type = 'inquiry', duration = 5000) {
+        const container = document.getElementById('notification-container');
+
+        const notification = document.createElement('div');
+        notification.classList.add('notification', type);
+        notification.textContent = message;
+
+        container.appendChild(notification);
+
+        // Trigger the show animation
+        setTimeout(() => {
+          notification.classList.add('show');
+        }, 100); // Slight delay to allow for CSS transition
+
+        // Remove the notification after the specified duration
+        setTimeout(() => {
+          notification.classList.remove('show');
+          // Remove the element from the DOM after the transition
+          notification.addEventListener('transitionend', () => {
+            notification.remove();
+          });
+        }, duration);
+      }
+
+      // Function to simulate an inquiry
+      function simulateInquiry() {
+        const inquiries = [
+          'John Doe is interested in Luxury Brownies.',
+          'Jane Smith wants to order Cheesecake.',
+          'Mike Johnson is asking about Rumballs.',
+          'Emily Davis would like to place an order for American Cookies.',
+          'Sophia Wilson has a question about custom orders.'
+        ];
+
+        // Select a random inquiry from the list
+        const randomInquiry = inquiries[Math.floor(Math.random() * inquiries.length)];
+
+        // Display the inquiry as a floating notification
+        showNotification(randomInquiry, 'inquiry', 7000);
+      }
+
+      // Initial inquiry simulation after 7 seconds
+      setTimeout(simulateInquiry, 7000);
+
+      // Repeat inquiry simulation every 7 seconds
+      setInterval(simulateInquiry, 14000);
+    });
+  </script>
+</body>
+</html>
